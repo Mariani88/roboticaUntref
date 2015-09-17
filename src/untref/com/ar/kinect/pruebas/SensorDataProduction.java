@@ -82,7 +82,7 @@ public class SensorDataProduction implements SensorData {
 				if (depth[z] == 0) {
 					color = Color.gray;
 				} else if (depth[z] > max) {
-					color = Color.black;
+					color = Color.WHITE;
 				} else if (depth[z] < min) {
 					color = Color.white;
 				} else {
@@ -133,16 +133,18 @@ public class SensorDataProduction implements SensorData {
 		for (int i = 0; i < this.getWidth(); i+=cantPixeles) {
 			for (int j = 0; j < this.getHeight() ; j+= cantPixeles) {								
 				
-				if(this.getDistancia(i,j) <= dist ){	
-					this.pintarContorno(i, j, cantPixeles);		
+				if(this.getDistancia(i,j) < dist - 200 ){	
+					this.pintarContorno(i, j, cantPixeles, Color.BLACK);		
+				} else if (dist - 200 <= this.getDistancia(i, j)
+						&& this.getDistancia(i, j) <= dist + 200) {
+					this.pintarContorno(i, j, cantPixeles,Color.BLUE);
 				}
 			}
 		}
 	}
 	
-	private void pintarContorno(int fila, int columna, int cantidadDePixeles){
-
-		Color color = Color.black;
+	private void pintarContorno(int fila, int columna, int cantidadDePixeles, Color color){
+		
 		int pixeles = cantidadDePixeles/2 + cantidadDePixeles % 2;
 		
 		int pixelInicioDeFila = fila - pixeles;
