@@ -11,8 +11,12 @@ public interface SensorData {
 	
 	float getDistancia(int x, int y);
 	
+	double getAltura(int x, int y, int rango_altura);
+	
 	BufferedImage getImagenProfundidad();
 	
-	void setPixelColorPorProfundidad(float dist, int cantPixeles);
+	void setPixelColorPorProfundidad(float dist, int cantPixeles, Color colorContorno);
+	
+	public void pintarCurvaNivel(int distEntreCurvas);
 	
 }

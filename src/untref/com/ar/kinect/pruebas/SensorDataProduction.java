@@ -23,21 +23,19 @@ public class SensorDataProduction implements SensorData {
 		}
 
 		this.colorFrame = kinect.getColorFrame();
-		this.depth = kinect.getDepthFrame();
-
+		this.depth = kinect.getDepthFrame();		
+		
 		this.width = kinect.getColorWidth();
 		this.height = kinect.getColorHeight();
 
 		this.construirMatrizColor();
-		this.construirMatrizProfundidad();
-		//this.setPixelColorPorProfundidad(7000,20);//agregado
+		this.construirMatrizProfundidad();		
 	}
 
 	private void construirMatrizColor() {
 		matrizColor = new Color[this.getWidth()][this.getHeight()];
-		imagenColor = new BufferedImage(this.getWidth(), this.getHeight(),
-				BufferedImage.TYPE_3BYTE_BGR);
-
+		imagenColor = new BufferedImage(this.getWidth(), this.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+		
 		for (int i = 0; i < this.getHeight(); i++) {
 			for (int j = 0; j < this.getWidth(); j++) {
 
@@ -50,7 +48,6 @@ public class SensorDataProduction implements SensorData {
 				int alpha = posicionInicial + 3 + height;
 
 				Color color = construirColor(blue, green, red, alpha);
-
 				this.matrizColor[j][i] = color;
 				imagenColor.setRGB(j, i, color.getRGB());
 			}
@@ -66,9 +63,8 @@ public class SensorDataProduction implements SensorData {
 
 	private void construirMatrizProfundidad() {
 		matrizProfundidad = new float[this.getWidth()][this.getHeight()];
-		imagenProfundidad = new BufferedImage(this.getWidth(),
-				this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-
+		imagenProfundidad = new BufferedImage(this.getWidth(),this.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+		
 		for (int i = 0; i < 480; i++) {
 			for (int j = 0; j < 640; j++) {
 
@@ -128,22 +124,27 @@ public class SensorDataProduction implements SensorData {
 	//**************************agregado****************************************************
 
 	@Override
-	public void setPixelColorPorProfundidad(float dist, int cantPixeles) {
-			
+	public void setPixelColorPorProfundidad(float dist, int cantPixeles, Color colorContorno) {
+		
+		short deltaContorno = 200;
+		
 		for (int i = 0; i < this.getWidth(); i+=cantPixeles) {
 			for (int j = 0; j < this.getHeight() ; j+= cantPixeles) {								
 				
-				if(this.getDistancia(i,j) < dist - 200 ){	
-					this.pintarContorno(i, j, cantPixeles, Color.BLACK);		
-				} else if (dist - 200 <= this.getDistancia(i, j)
-						&& this.getDistancia(i, j) <= dist + 200) {
-					this.pintarContorno(i, j, cantPixeles,Color.BLUE);
-				}
+				if(this.getDistancia(i,j) < dist - deltaContorno ){	
+					
+					this.pintarContorno(i, j, cantPixeles, Color.BLACK, this.getImagenProfundidad());		
+				
+				} else 
+					if ( this.getDistancia(i, j) >= dist - deltaContorno && this.getDistancia(i, j) <= dist + deltaContorno) {
+					
+						this.pintarContorno(i, j, cantPixeles,colorContorno, this.getImagenProfundidad());
+					}
 			}
 		}
-	}
+	}	
 	
-	private void pintarContorno(int fila, int columna, int cantidadDePixeles, Color color){
+	private void pintarContorno(int fila, int columna, int cantidadDePixeles, Color color,BufferedImage img){
 		
 		int pixeles = cantidadDePixeles/2 + cantidadDePixeles % 2;
 		
@@ -157,7 +158,7 @@ public class SensorDataProduction implements SensorData {
 			for (int j = pixelInicioDeColumna; j < pixelFinalDeColumna ; j++){
 				
 				if (esPosicionValida(i,j)){
-					this.imagenProfundidad.setRGB(i,j, color.getRGB());
+					img.setRGB(i,j, color.getRGB());
 				}
 			}
 		}
@@ -171,5 +172,62 @@ public class SensorDataProduction implements SensorData {
 		return filaValida && columnaValida;
 	}
 	
+	
+	@Override
+	public void pintarCurvaNivel(int distEntreCurvas) {
+		
+		int deltaContorno = 50;
+		int max = 30000;//3 metros
+		int min = 7000;//70 cm
+		int dist = max;
+		Color color;
+		float hue;
+		
+		int i,j;
+		if (dist >= 2) {
+			deltaContorno = 100;
+		}
+		
+		while(dist >= min){
+		
+			for ( i = getWidth() -1; i > 0; i -= 3) {
+				for ( j = getHeight() -1; j > 0; j -= 3) {
+													
+					if (this.getDistancia(i, j) >= dist - deltaContorno
+							&& this.getDistancia(i, j) <= dist + deltaContorno) {
+						
+						hue = (this.getDistancia(i, j)/100000);
+						color = new Color(Color.HSBtoRGB(hue, 1.0f, 1.0f));
+						
+						this.pintarContorno(i, j, 3, color, this.getImagenColor());
+					}
+				}
+			}
+		
+		dist -= distEntreCurvas;
+		}
+	}
+	
+	@Override
+	public double getAltura(int x,int y,int rango_profundidad){
+		
+		double tg_angulo = 0.60;//0.662;		
+		int cont=0;
+		int aux_fila = y;		
+		double alt_pixel=0.0;
+		
+		if (this.getDistancia(x, y)==0.0) return this.getDistancia(x, y);		
+		
+		while (aux_fila < this.getHeight() &&
+				((this.getDistancia(x, y) - this.getDistancia(x, aux_fila))<= rango_profundidad)){
+			cont++;						
+			aux_fila++;
+		}
+			
+		alt_pixel = (this.getDistancia(x, 240) * tg_angulo)/(this.getHeight()/2);
+		
+		return alt_pixel*cont; 
+		
+	}
 	
 }

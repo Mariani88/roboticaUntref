@@ -11,12 +11,12 @@ public class SensorDataTesting implements SensorData {
 
 	private BufferedImage color;
 	private BufferedImage profundidad;
-
+	
 	public SensorDataTesting() {
 
 		try {
 			color = ImageIO.read(new File("heat-bikini-orig.jpg"));
-			profundidad = ImageIO.read(new File("heat-bikini-alpha.png"));
+			profundidad = ImageIO.read(new File("heat-bikini-alpha.png"));			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -43,6 +43,14 @@ public class SensorDataTesting implements SensorData {
 	}
 	
 	@Override
-	public void setPixelColorPorProfundidad(float dist, int cantPixeles){};
-
+	public void setPixelColorPorProfundidad(float dist, int cantPixeles,Color colorContorno){}
+	
+	@Override
+	public void pintarCurvaNivel(int distEntreCurvas){}
+	
+	@Override
+	public double getAltura(int x, int y,int rango_altura){
+		return 0;
+	}
+	
 }

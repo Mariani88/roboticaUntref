@@ -6,7 +6,6 @@ public class Main {
 		Form form = new Form(Boolean.FALSE);
 		form.start();
 		
-		//System.out.println((Float.parseFloat("0.7"))*10000);
 	}
 
 }
