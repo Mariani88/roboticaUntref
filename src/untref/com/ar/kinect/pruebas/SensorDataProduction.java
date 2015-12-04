@@ -209,25 +209,23 @@ public class SensorDataProduction implements SensorData {
 	}
 	
 	@Override
-	public double getAltura(int x,int y,int rango_profundidad){
+public double getAltura(int x,int y,int rango_profundidad){
 		
-		double tg_angulo = 0.60;//0.662;		
-		int cont=0;
+		double tg_angulo = 0.54;	
 		int aux_fila = y;		
-		double alt_pixel=0.0;
+		double alt=0.0;
 		
 		if (this.getDistancia(x, y)==0.0) return this.getDistancia(x, y);		
 		
 		while (aux_fila < this.getHeight() &&
 				((this.getDistancia(x, y) - this.getDistancia(x, aux_fila))<= rango_profundidad)){
-			cont++;						
+			alt += (this.getDistancia(x, aux_fila) * tg_angulo)/(this.getHeight()/2);
+			
 			aux_fila++;
 		}
-			
-		alt_pixel = (this.getDistancia(x, 240) * tg_angulo)/(this.getHeight()/2);
 		
-		return alt_pixel*cont; 
+		return alt;
 		
-	}
-	
+	}	
+		
 }

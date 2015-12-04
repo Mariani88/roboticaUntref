@@ -39,15 +39,14 @@ public class Form extends JFrame {
 	private JRadioButton radioColor;
 	private JRadioButton radioProfundidad;
 	private JRadioButton radioCurvasNivel;
-	private JRadioButton radioAmbos;	
+	private JRadioButton radioAmbos;
+	private JRadioButton radioAlturaSupPlana;
+	private JRadioButton radioAlturaSupCurva;
 	private JComboBox<String> combo_DistanciaObstaculos;
 	private JComboBox<String> combo_cantPixeles;
 	private JComboBox<String> combo_coloresContorno;
-	private JComboBox<String> combo_NivelesDeAltura;
-	private JLabel label_NivelesDeAltura;	
 	private JLabel label_DistanciaObstaculos;
 	private JTextField input_IntervaloEntreCurvas;
-	private JTextField input_Rango_de_Profundidad;
 	private JLabel label_IntervaloEntreCurvas;
 	private JLabel label_BarridoPixeles;
 	private JLabel label_ColoresContorno;
@@ -142,35 +141,30 @@ public class Form extends JFrame {
 		radioColor.setSelected(true);
 		radioProfundidad = builder.contruirRadioButton("Profundidad", 0, 1);
 		radioAmbos = builder.contruirRadioButton("Ambos", 0, 2);
-		radioCurvasNivel = builder.contruirRadioButton("Curvas de Nivel", 0, 3);		
+		radioCurvasNivel = builder.contruirRadioButton("Curvas de Nivel", 0, 3);
+		radioAlturaSupPlana = builder.contruirRadioButton("Altura Sup. Plana", 0, 4);
+		radioAlturaSupPlana.setSelected(true);
+		radioAlturaSupCurva = builder.contruirRadioButton("Altura Sup. Curva", 0, 5);
 		scrollBar = builder.construirScrollBar(0, 5);
-		alpha = 0.50f;
+		alpha = 0.50f;			
 		
-		label_NivelesDeAltura = builder.contruirLabel("Niveles de altura cada:", 0, 4);
-		String[] opciones = {"15","25","50","75","100"};
-		combo_NivelesDeAltura = builder.construirCombo(0, 4, opciones);
-		
-		label_IntervaloEntreCurvas = builder.contruirLabel("Curvas cada:", 0, 5);
-		input_IntervaloEntreCurvas = builder.construirInputText(0, 5);		
+		label_IntervaloEntreCurvas = builder.contruirLabel("Curvas cada(cm):", 0, 6);
+		input_IntervaloEntreCurvas = builder.construirInputText(0, 6);		
 		input_IntervaloEntreCurvas.setText("10");		
 		
-		label_DistanciaObstaculos = builder.contruirLabel("Obstaculos a:", 0, 6);
+		label_DistanciaObstaculos = builder.contruirLabel("Obstaculos a:", 0, 7);
 		String[] opcionesCombo = {"0.7","1","1.5","2","2.5","3"};
-		combo_DistanciaObstaculos = builder.construirCombo(0, 6, opcionesCombo);					
+		combo_DistanciaObstaculos = builder.construirCombo(0, 7, opcionesCombo);					
 		
-		label_BarridoPixeles = builder.contruirLabel("Cant. Pixeles", 0, 7);
+		label_BarridoPixeles = builder.contruirLabel("Cant. Pixeles", 0, 8);
 		String[] opcionesComboPixeles = {"5","10","15"};
-		combo_cantPixeles = builder.construirCombo(0, 7, opcionesComboPixeles);
+		combo_cantPixeles = builder.construirCombo(0, 8, opcionesComboPixeles);
 		combo_cantPixeles.setSelectedIndex(1);	
 		
-		label_ColoresContorno = builder.contruirLabel("Contorno:", 0, 8);
+		label_ColoresContorno = builder.contruirLabel("Contorno:", 0, 9);
 		String[] opcionesComboColores = {"Azul","Amarillo","Naranja","Rojo","Verde"};
 		//Si agrega otro color al combo modificar metodo #getColorContorno()
-		combo_coloresContorno = builder.construirCombo(0, 8, opcionesComboColores);
-		
-		builder.contruirLabel("Rango distancia(cm):", 0, 9);
-		input_Rango_de_Profundidad = builder.construirInputText(0, 9);		
-		input_Rango_de_Profundidad.setText("4");
+		combo_coloresContorno = builder.construirCombo(0, 9, opcionesComboColores);
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(10, 10, 10, 10);
@@ -184,7 +178,11 @@ public class Form extends JFrame {
 		radioButtons.add(radioColor);
 		radioButtons.add(radioProfundidad);
 		radioButtons.add(radioAmbos);
-		radioButtons.add(radioCurvasNivel);		
+		radioButtons.add(radioCurvasNivel);	
+		
+		ButtonGroup radioButtonsAltura = new ButtonGroup();
+		radioButtonsAltura.add(radioAlturaSupPlana);	
+		radioButtonsAltura.add(radioAlturaSupCurva);	
 		
 		Container contentPane = this.getContentPane();
 		JScrollPane scrollPane = new JScrollPane(contentPane);
@@ -252,8 +250,6 @@ public class Form extends JFrame {
 	private void setVisibilidadFiltrosCurvasDenivel(boolean bool){				
 		input_IntervaloEntreCurvas.setVisible(bool);
 		label_IntervaloEntreCurvas.setVisible(bool);
-		combo_NivelesDeAltura.setVisible(bool);
-		label_NivelesDeAltura.setVisible(bool);
 	}
 	
 	private Color getColorContorno(){
@@ -283,7 +279,12 @@ public class Form extends JFrame {
 		label_color_value.setText("(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ")");
 		label_distancia_value.setText(String.valueOf(data.getDistancia(e.getX(), e.getY()) / 100) + " cm");
 		
-		int rango_altura = Integer.parseInt(input_Rango_de_Profundidad.getText().isEmpty()?"4":input_Rango_de_Profundidad.getText())*100;		
+		int rango_altura;			
+		if(radioAlturaSupPlana.isSelected())
+			rango_altura = 1200;						
+		else
+			rango_altura = 4000;
+					
 		label_altura_value.setText(String.valueOf(data.getAltura(e.getX(), e.getY(),rango_altura)/100) + " cm");
 
 	}
@@ -333,12 +334,9 @@ public class Form extends JFrame {
 		}
 				
 		BufferedImage imagen = null;		
-				
-		if (radioColor.isSelected()) {
+						
+		if (radioColor.isSelected())
 			imagen = data.getImagenColor();
-		}
-		
-		
 		
 		if (radioProfundidad.isSelected()) {
 			
