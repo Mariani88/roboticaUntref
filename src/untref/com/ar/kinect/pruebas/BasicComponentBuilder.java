@@ -3,6 +3,7 @@ package untref.com.ar.kinect.pruebas;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -28,7 +29,7 @@ public BasicComponentBuilder(Form form, JPanel panel){
 		
 }
 
-public JRadioButton contruirRadioButton(String nombre, int posX, int posY){
+public JRadioButton construirRadioButton(String nombre, int posX, int posY){
 	
 	JRadioButton radioButton = new JRadioButton(nombre);
 	
@@ -40,12 +41,35 @@ public JRadioButton contruirRadioButton(String nombre, int posX, int posY){
 	c.insets = new Insets(5, 5, 5, 5);
 	
 	radioButton.setFocusPainted(false);
+	radioButton.setVisible(false);
 	
 	this.form.getContentPane().add(panel, c);
 	this.panel.add(radioButton, c);
 	
 	return radioButton;
 }
+
+
+public JButton construirButton(String nombre, int posX, int posY){
+	
+	JButton button = new JButton(nombre);
+	
+	GridBagConstraints c = new GridBagConstraints();
+	c.weightx = 1;
+	c.anchor = GridBagConstraints.WEST;
+	c.gridx = posX;
+	c.gridy = posY;
+	c.insets = new Insets(5, 5, 5, 5);
+	
+	button.setFocusPainted(false);
+	button.setVisible(false);
+	
+	this.form.getContentPane().add(panel, c);
+	this.panel.add(button, c);
+	
+	return button;
+}
+
 
 public JTextField construirInputText(int posX, int posY){
 	
@@ -58,7 +82,8 @@ public JTextField construirInputText(int posX, int posY){
 	c.gridy = posY;
 	c.insets = new Insets(5, 5, 5, 5);
 	
-	input.setPreferredSize(new Dimension(75,25));	
+	input.setPreferredSize(new Dimension(75,25));
+	input.setVisible(false);
 	
 	
 	this.form.getContentPane().add(panel, c);
@@ -80,7 +105,7 @@ public JComboBox<String> construirCombo(int posX, int posY, String[] opciones){
 	
 	combo.setPreferredSize(new Dimension(75,25));
 	combo.setSelectedIndex(0);//Por defecto el combo se crea con el primer elemento seleccionado
-	
+	combo.setVisible(false);
 	
 	this.form.getContentPane().add(panel, c);
 	this.panel.add(combo, c);
@@ -88,7 +113,7 @@ public JComboBox<String> construirCombo(int posX, int posY, String[] opciones){
 	return combo;
 }
 
-public JLabel contruirLabel(String nombre, int posX, int posY){
+public JLabel construirLabel(String nombre, int posX, int posY){
 	
 	JLabel label = new JLabel(nombre);
 	
@@ -97,6 +122,7 @@ public JLabel contruirLabel(String nombre, int posX, int posY){
 	c.gridx = posX;
 	c.gridy = posY;
 
+	label.setVisible(false);
 	this.form.getContentPane().add(panel, c);
 	this.panel.add(label, c);
 	
@@ -105,12 +131,12 @@ public JLabel contruirLabel(String nombre, int posX, int posY){
 }
 
 public JScrollBar construirScrollBar(int posX,int posY){
-	
+		
 	final JScrollBar scrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
 	scrollBar.setMaximum(100);
 	scrollBar.setMinimum(0);
 	scrollBar.setVisibleAmount(0);
-	scrollBar.setValue(50);	
+	scrollBar.setValue(50);
 	scrollBar.addAdjustmentListener(new AdjustmentListener() {
 
 		@Override
@@ -120,8 +146,10 @@ public JScrollBar construirScrollBar(int posX,int posY){
 		}
 	});
 	
+	scrollBar.setVisible(false);
+	
 	GridBagConstraints c = new GridBagConstraints();
-	c.weightx = 1;
+	c.weightx = 1;	
 	c.anchor = GridBagConstraints.WEST;
 	c.fill = GridBagConstraints.HORIZONTAL;
 	c.gridx = posX;

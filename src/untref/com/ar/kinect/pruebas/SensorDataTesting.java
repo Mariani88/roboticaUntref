@@ -28,7 +28,7 @@ public class SensorDataTesting implements SensorData {
 	}
 
 	@Override
-	public float getDistancia(int x, int y) {
+	public double getDistancia(int x, int y) {
 		return 0;
 	}
 
@@ -51,6 +51,14 @@ public class SensorDataTesting implements SensorData {
 	@Override
 	public double getAltura(int x, int y,int rango_altura){
 		return 0;
+	}
+	
+		
+	@Override
+	public boolean exportarDatos(String path){
+		
+		System.out.println("Boton presionado");
+		return true;
 	}
 	
 }

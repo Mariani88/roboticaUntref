@@ -9,14 +9,18 @@ public interface SensorData {
 	
 	Color getColorEnPixel(int x, int y);
 	
-	float getDistancia(int x, int y);
+	double getDistancia(int x, int y);
 	
 	double getAltura(int x, int y, int rango_altura);
+	
 	
 	BufferedImage getImagenProfundidad();
 	
 	void setPixelColorPorProfundidad(float dist, int cantPixeles, Color colorContorno);
 	
 	public void pintarCurvaNivel(int distEntreCurvas);
+	
+	public boolean exportarDatos(String path);
+	
 	
 }
