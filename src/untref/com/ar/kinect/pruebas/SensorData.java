@@ -11,8 +11,7 @@ public interface SensorData {
 	
 	double getDistancia(int x, int y);
 	
-	double getAltura(int x, int y, int rango_altura);
-	
+	double getAltura(int x, int y);
 	
 	BufferedImage getImagenProfundidad();
 	
@@ -21,6 +20,5 @@ public interface SensorData {
 	public void pintarCurvaNivel(int distEntreCurvas);
 	
 	public boolean exportarDatos(String path);
-	
 	
 }

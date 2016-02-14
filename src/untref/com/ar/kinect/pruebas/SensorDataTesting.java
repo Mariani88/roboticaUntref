@@ -49,16 +49,14 @@ public class SensorDataTesting implements SensorData {
 	public void pintarCurvaNivel(int distEntreCurvas){}
 	
 	@Override
-	public double getAltura(int x, int y,int rango_altura){
+	public double getAltura(int x, int y){
 		return 0;
 	}
-	
 		
 	@Override
 	public boolean exportarDatos(String path){
-		
-		System.out.println("Boton presionado");
+		System.out.println("Botón presionado");
 		return true;
 	}
-	
+
 }

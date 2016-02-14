@@ -121,11 +121,11 @@ public JLabel construirLabel(String nombre, int posX, int posY){
 	c.anchor = GridBagConstraints.WEST;
 	c.gridx = posX;
 	c.gridy = posY;
+	c.insets = new Insets(5, 5, 5, 5);
 
 	label.setVisible(false);
 	this.form.getContentPane().add(panel, c);
-	this.panel.add(label, c);
-	
+	this.panel.add(label, c);	
 	return label;	
 	
 }
